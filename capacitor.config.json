@@ -1,0 +1,8 @@
+{
+  "appId": "com.daarb.balowty_mobile",
+  "appName": "balowty_mobile",
+  "webDir": "www",
+  "ios": {
+    "contentInset": "automatic"
+  }
+}

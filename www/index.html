@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/index.css" />
+  <title>بالوتي</title>
+  <style>
+    .centered {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+    <h1>بالوتي</h1>
+    <form>
+      <fieldset class="grid">
+        <input required type="number" placeholder="الفريق الأوّل" id="firstTeamInput">
+        <input required type="number" placeholder="الفريق الثاني" id="secondTeamInput">
+      </fieldset>
+      <input type="submit" value="إضافة">
+    </form>
+    <h2 class="centered">النشرة </h2>
+    <h2 class="centered"><span id="firstTeamScore">0</span> : <span id="secondTeamScore">0</span></h2>
+    <h2 class="centered" id="scoreHistory"></h2>
+  </main>
+  <script>
+    let firstTeamScore = 0
+    let secondTeamScore = 0
+    let scoreHistory = [[firstTeamScore, secondTeamScore]]
+
+    document.querySelector("form").onsubmit = (event) => {
+      event.preventDefault()
+      updateTotalScore()
+      resetScoreInput()
+
+      updateScoreHistoryHTML()
+    }
+
+    function updateTotalScore() {
+
+      scoreHistory.push([
+        Number(document.querySelector("#firstTeamInput").value),
+        Number(document.querySelector("#secondTeamInput").value)
+      ])
+      calculateTeamScores()
+      updateTeamScoresHTML()
+    }
+
+    function calculateTeamScores() {
+      firstTeamScore = 0
+      secondTeamScore = 0
+      scoreHistory.map((scores) => {
+        firstTeamScore += scores[0]
+        secondTeamScore += scores[1]
+      })
+    }
+
+    function updateScoreHistoryHTML() {
+      let scoreHistoryHTML = ""
+      scoreHistory.map((scores, i) => {
+        scoreHistoryHTML =
+          scoreHistoryHTML +
+          `<div style="position: relative;">
+            <span>${scores[0]}</span> : <span>${scores[1]}</span>
+          ${i == scoreHistory.length - 1 ?
+            '<button style="position: absolute; left: 5px;" onclick="onDeleteCurrentScore()" id="deleteCurrentScore">X</button>' :
+            ""}
+        </div>`
+      })
+
+      document.querySelector("#scoreHistory").innerHTML = scoreHistoryHTML
+    }
+
+    function updateTeamScoresHTML() {
+      document.querySelector("#firstTeamScore").innerHTML = firstTeamScore
+      document.querySelector("#secondTeamScore").innerHTML = secondTeamScore
+    }
+
+    function resetScoreInput() {
+      document.querySelector("#firstTeamInput").value = ""
+      document.querySelector("#secondTeamInput").value = ""
+    }
+
+    function onDeleteCurrentScore() {
+      scoreHistory.pop()
+      calculateTeamScores()
+      updateTeamScoresHTML()
+      updateScoreHistoryHTML()
+    }
+  </script>
+</body>
+
+</html>
